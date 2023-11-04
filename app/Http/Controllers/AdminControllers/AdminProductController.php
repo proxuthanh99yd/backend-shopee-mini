@@ -24,9 +24,9 @@ class AdminProductController extends Controller
             if ($request->query('query')) {
                 switch ($filter) {
                     case 'all':
-                        return Product::where('name','like','%'.$request->query('query').'%')->paginate(10);
+                        return Product::where('name', 'like', '%'.$request->query('query').'%')->paginate(10);
                     case 'hidden':
-                        return Product::where('name','like','%'.$request->query('query').'%')->where('active', 0)->paginate(10);
+                        return Product::where('name', 'like', '%'.$request->query('query').'%')->where('active', 0)->paginate(10);
                     case 'out_of_stock':
                         $classify = Classify::where("stock", 0)->get("classification_group_id");
                         $classification = ClassificationGroup::whereIn("id", $classify)->get("product_id");
@@ -34,9 +34,9 @@ class AdminProductController extends Controller
                         for ($i = 0; $i < count($classification); $i++) {
                             $arr[$i] = $classification[$i]->product_id;
                         }
-                        return Product::where('name','like','%'.$request->query('query').'%')->whereIn('id', $arr)->paginate(10);
+                        return Product::where('name', 'like', '%'.$request->query('query').'%')->whereIn('id', $arr)->paginate(10);
                     case 'active':
-                        return Product::where('name','like','%'.$request->query('query').'%')->where('active', 1)->paginate(10);
+                        return Product::where('name', 'like', '%'.$request->query('query').'%')->where('active', 1)->paginate(10);
                     default:
                         throw new Exception("Something wrong", 500);
                 }
@@ -56,9 +56,9 @@ class AdminProductController extends Controller
                         throw new Exception("Something wrong", 500);
                 }
             }
-//            return Product::with('thumbnails', 'categories', 'brands', 'classification', 'classify')->paginate(10);
+            //            return Product::with('thumbnails', 'categories', 'brands', 'classification', 'classify')->paginate(10);
         } catch (\Exception $th) {
-//            throw new Exception("Something wrong", 500);
+            //            throw new Exception("Something wrong", 500);
             return $th;
         }
     }
@@ -70,9 +70,9 @@ class AdminProductController extends Controller
     {
         try {
             return response()->json([
-                'product' =>Product::with('thumbnails', 'categories', 'brands', 'classification')->find($id),
-                'categories'=>Category::all(),
-                'brands'=>Brand::all()
+                'product' => Product::with('thumbnails', 'categories', 'brands', 'classification')->find($id),
+                'categories' => Category::all(),
+                'brands' => Brand::all()
                 ]);
         } catch (\Exception $ex) {
             throw new Exception("Something wrong!", 500);
@@ -303,7 +303,7 @@ class AdminProductController extends Controller
             }
             Thumbnail::where('product_id', $id)->delete();
             $product->delete();
-            return Product::all();
+            return $id;
         } catch (Exception $ex) {
             throw new Exception("Something wrong!", 500);
         }
@@ -329,8 +329,8 @@ class AdminProductController extends Controller
     {
         try {
             return response()->json([
-                'categories'=>Category::all(),
-                'brands'=>Brand::all()
+                'categories' => Category::all(),
+                'brands' => Brand::all()
             ]);
         } catch (Exception $exception) {
             throw new Error("change status failed!s", 500);
