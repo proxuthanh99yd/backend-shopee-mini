@@ -305,7 +305,7 @@ class AdminProductController extends Controller
             $product->delete();
             return $id;
         } catch (Exception $ex) {
-            throw new Exception("Something wrong!", 500);
+            throw new Exception($ex, 500);
         }
     }
 
